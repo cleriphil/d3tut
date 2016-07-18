@@ -32,4 +32,6 @@ window.onload = function(){
         return y(1)-1;
         //use y scaling function on first element and subtract 1 to add whitespace b/w bars
       }); //height of each bar
+
+      addText(svg);
 };
