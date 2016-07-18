@@ -1,15 +1,31 @@
 window.onload = function(){
   var w = 800;
   var h = 450;
+  var margin = {
+    top: 20,
+    bottom: 20,
+    left: 20,
+    right: 20
+  }
+  var width = w - margin.left - margin.right;
+  var height = h - margin.top - margin.bottom;
 
-  scaleData(w,h);
-  console.log('x: ' + x);
+  var x = d3.scaleLinear()
+          .domain([0,d3.max(data)]) //range of values, smallest and largest val
+          .range([0,width]);//range is output values that we want to scale to
+                        //scale to width of svg element
+  var y = d3.scaleLinear()
+          .domain([0,data.length])
+          .range([0,height]);
 
   var svg = d3.select('body').append('svg') //select body text-align and append svg tag
               .attr('id', 'chart')
               .attr('width', w)
               .attr('height', h);
 
+  var chart = svg.append('g') //great svg group
+              .classed('display', true)
+              .attr('transform','translate(' + margin.top + ',' + margin.left +')');
 
   function plot(params){
     console.log(this)
@@ -56,8 +72,8 @@ window.onload = function(){
             return d; //display value
           });
   }
-  
-  plot.call(svg, {
+
+  plot.call(chart, {
     data: data
   }); //use .call to change this to svg instead of window
 
