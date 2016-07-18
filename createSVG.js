@@ -14,7 +14,7 @@ window.onload = function(){
     .data(data) //bind data array
     .enter() //in the enter phase
       .append('rect')
-      .attr('class', 'bar')
+      .classed("bar", true)
       .attr('x', 0)
       .attr('y', function(d,i){
         //to stagger the bars
