@@ -10,7 +10,7 @@ body,html {
   border: 1px solid #CCC;
 }
 .bar {
-  fill: purple;
+  fill: coral;
   shape-rendering: crispEdges;
 
 }
