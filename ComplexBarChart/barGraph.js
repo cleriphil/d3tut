@@ -61,6 +61,13 @@ window.onload = function(){
 
 
   function plot(params){
+    this.append("g")
+      .classed("gridline", true)
+      .attr("transform", "translate(0,0)")
+      .call(d3.axisLeft(y)
+        .tickSize(-width)
+        .tickFormat(""));
+
     this.selectAll('.bar')
       .data(params.data) //bind data array
       .enter() //in the enter phase
@@ -124,6 +131,7 @@ window.onload = function(){
         .attr("transform", "translate(0,0)")
         .call(d3.axisLeft(y));
   }
+
 
   plot.call(chart, {
     data: data
