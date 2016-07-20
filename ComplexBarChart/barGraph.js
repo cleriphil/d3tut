@@ -19,7 +19,7 @@ window.onload = function(){
   var h = 450;
   var margin = {
     top: 40,
-    bottom: 60,
+    bottom: 80,
     left: 60,
     right: 40
   };
@@ -135,6 +135,24 @@ window.onload = function(){
         .classed('y axis', true)
         .attr("transform", "translate(0,0)")
         .call(d3.axisLeft(y));
+
+      this.select(".y.axis")
+        .append("text")
+        .classed('axisLabel', true)
+        .attr("x", 0)
+        .attr("y", 0)
+        .style("text-anchor", "middle")
+        .attr("transform", "translate(-50," + height/2 + ") rotate(-90)")
+        .text("Units sold");
+
+      this.select(".x.axis")
+        .append("text")
+        .classed('axisLabel', true)
+        .attr("x", 0)
+        .attr("y", 0)
+        .style("text-anchor", "middle")
+        .attr("transform", "translate(" + width/2 + ", 70)")
+        .text("Donut type");
   }
 
 
