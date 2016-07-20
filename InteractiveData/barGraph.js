@@ -1,5 +1,4 @@
 window.onload = function(){
-  // var data = [132,71,337,93,78,43,20,16,30,8,17,21];
   var data = [
     {key: "Glazed", value: 132},
     {key: "Jelly", value: 71},
@@ -49,12 +48,12 @@ window.onload = function(){
   var ordinalColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
 
-  var svg = d3.select('body').append('svg') //select body text-align and append svg tag
+  var svg = d3.select('body').append('svg')
               .attr('id', 'chart')
               .attr('width', w)
               .attr('height', h);
 
-  var chart = svg.append('g') //great svg group
+  var chart = svg.append('g')
               .classed('display', true)
               .attr('transform','translate(' + margin.left + ',' + margin.top +')');
 
@@ -68,42 +67,32 @@ window.onload = function(){
         .tickFormat(""));
 
     this.selectAll('.bar')
-      .data(params.data) //bind data array
-      .enter() //in the enter phase
+      .data(params.data)
+      .enter()
       .append('rect')
       .classed("bar", true)
       .attr('x', function(d,i){
-        return x(d.key); //to spread out columns after flipping axis
+        return x(d.key);
       })
       .attr('y', function(d,i){
-        //to stagger the bars
         return y(d.value);
-        //use y scaling function
       })
       .attr('width', function(d,i){
         //d is data bound to element
         //i is index of the data
         return x.bandwidth();
-        //return x(d.value);
-        //use x scaling function
       })
       .attr('height', function(d,i){
         return height - y(d.value);
-        //return y.bandwidth()-1;
-      }) //height of each bar
+      })
       .style("fill", function(d,i){
         return ordinalColorScale(i);
-        //return linearColorScale(i);
       });
       this.selectAll('.bar-label')
         .data(params.data)
         .enter()
           .append('text')
           .classed('bar-label', true)
-          /*.attr('x', function(d,i){
-            return x(d.value); // x(d) is width of bar
-            //css used to adjust text position
-          })*/
           .attr('x', function(d,i){
             return x(d.key) + (x.bandwidth()/2);
           })
@@ -111,13 +100,9 @@ window.onload = function(){
           .attr('y', function(d,i){
             return y(d.value);
           })
-          /*.attr('dy', function(d,i){
-            return y.bandwidth()/1.5+2; //dy used to nudge text position to halfway point
-            // y.bandwidth() is height of one bar
-          })*/
           .attr('dy', -6)
           .text(function(d){
-            return d.value; //display value
+            return d.value;
           });
 
       this.append("g")
@@ -156,6 +141,5 @@ window.onload = function(){
 
   plot.call(chart, {
     data: data
-  }); //use .call to change this to svg instead of window
-
+  });
 };
