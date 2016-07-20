@@ -19,7 +19,7 @@ window.onload = function(){
   var h = 450;
   var margin = {
     top: 40,
-    bottom: 20,
+    bottom: 60,
     left: 60,
     right: 40
   };
@@ -124,7 +124,12 @@ window.onload = function(){
       this.append("g")
         .classed('x axis', true)
         .attr("transform", "translate(" + 0 + "," + height + ")")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x))
+          .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", -8)
+            .attr("dy", 8)
+            .attr("transform", "translate(0,0) rotate(-45)");
 
       this.append("g")
         .classed('y axis', true)
