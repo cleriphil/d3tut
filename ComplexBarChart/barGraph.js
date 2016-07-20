@@ -41,6 +41,14 @@ window.onload = function(){
           .domain(keys)
           .range([0,height]);
 
+  //gradient
+  var linearColorScale = d3.scaleLinear()
+                          .domain([0, data.length])
+                          .range(["#572500", "#f68026"]);
+
+  //20 colors
+  var ordinalColorScale = d3.scaleOrdinal(d3.schemeCategory20);
+
   var svg = d3.select('body').append('svg') //select body text-align and append svg tag
               .attr('id', 'chart')
               .attr('width', w)
@@ -70,8 +78,11 @@ window.onload = function(){
       })
       .attr('height', function(d,i){
         return y.bandwidth()-1;
-      }); //height of each bar
-
+      }) //height of each bar
+      .style("fill", function(d,i){
+        return ordinalColorScale(i);
+        //return linearColorScale(i);
+      });
       this.selectAll('.bar-label')
         .data(params.data)
         .enter()
