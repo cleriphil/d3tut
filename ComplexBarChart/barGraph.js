@@ -20,9 +20,11 @@ window.onload = function(){
   var margin = {
     top: 20,
     bottom: 20,
-    left: 20,
+    left: 80,
     right: 20
   };
+
+  //width and height of chart
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
 
@@ -49,6 +51,7 @@ window.onload = function(){
   //20 colors
   var ordinalColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
+
   var svg = d3.select('body').append('svg') //select body text-align and append svg tag
               .attr('id', 'chart')
               .attr('width', w)
@@ -56,7 +59,9 @@ window.onload = function(){
 
   var chart = svg.append('g') //great svg group
               .classed('display', true)
-              .attr('transform','translate(' + margin.top + ',' + margin.left +')');
+              .attr('transform','translate(' + margin.left + ',' + margin.top +')');
+
+
 
   function plot(params){
     this.selectAll('.bar')
@@ -103,6 +108,16 @@ window.onload = function(){
           .text(function(d){
             return d.value; //display value
           });
+
+      this.append("g")
+        .classed('x axis', true)
+        .attr("transform", "translate(" + 0 + "," + height + ")")
+        .call(d3.axisBottom(x));
+
+      this.append("g")
+        .classed('y axis', true)
+        .attr("transform", "translate(0,0)")
+        .call(d3.axisLeft(y));
   }
 
   plot.call(chart, {
