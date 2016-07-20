@@ -15,8 +15,9 @@ body,html {
 
 }
 .bar-label{
-  fill: white;
-  text-anchor: end;
+  fill: #000;
+  /*text-anchor: end;*/
+  text-anchor: middle;
   font-size:20px;
 }
 

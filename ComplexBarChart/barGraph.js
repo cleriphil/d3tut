@@ -18,30 +18,27 @@ window.onload = function(){
   var w = 800;
   var h = 450;
   var margin = {
-    top: 20,
+    top: 40,
     bottom: 20,
-    left: 80,
-    right: 20
+    left: 60,
+    right: 40
   };
 
   //width and height of chart
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
 
-  var x = d3.scaleLinear()
-          .domain([0,d3.max(data, function(d){
-            return d.value;
-          })])
+  var x = d3.scaleBand()
+          .domain(data.map(function(entry){
+              return entry.key;
+            }))
           .range([0,width]);
-          /* Second argument in d3.max is the accessor function,
-          which is the same as array.map(accessor) */
 
-  var keys = data.map(function(entry){
-      return entry.key; //create array of keys
-    });
-  var y = d3.scaleBand()
-          .domain(keys)
-          .range([0,height]);
+  var y = d3.scaleLinear()
+            .domain([0,d3.max(data, function(d){
+              return d.value;
+            })])
+            .range([height,0]);
 
   //gradient
   var linearColorScale = d3.scaleLinear()
@@ -69,20 +66,24 @@ window.onload = function(){
       .enter() //in the enter phase
       .append('rect')
       .classed("bar", true)
-      .attr('x', 0)
+      .attr('x', function(d,i){
+        return x(d.key); //to spread out columns after flipping axis
+      })
       .attr('y', function(d,i){
         //to stagger the bars
-        return y(d.key);
+        return y(d.value);
         //use y scaling function
       })
       .attr('width', function(d,i){
         //d is data bound to element
         //i is index of the data
-        return x(d.value);
+        return x.bandwidth();
+        //return x(d.value);
         //use x scaling function
       })
       .attr('height', function(d,i){
-        return y.bandwidth()-1;
+        return height - y(d.value);
+        //return y.bandwidth()-1;
       }) //height of each bar
       .style("fill", function(d,i){
         return ordinalColorScale(i);
@@ -93,18 +94,22 @@ window.onload = function(){
         .enter()
           .append('text')
           .classed('bar-label', true)
-          .attr('x', function(d,i){
+          /*.attr('x', function(d,i){
             return x(d.value); // x(d) is width of bar
             //css used to adjust text position
+          })*/
+          .attr('x', function(d,i){
+            return x(d.key) + (x.bandwidth()/2);
           })
           .attr('dx', -4)
           .attr('y', function(d,i){
-            return y(d.key);
+            return y(d.value);
           })
-          .attr('dy', function(d,i){
+          /*.attr('dy', function(d,i){
             return y.bandwidth()/1.5+2; //dy used to nudge text position to halfway point
             // y.bandwidth() is height of one bar
-          })
+          })*/
+          .attr('dy', -6)
           .text(function(d){
             return d.value; //display value
           });
