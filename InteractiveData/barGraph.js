@@ -57,6 +57,13 @@ window.onload = function(){
               .classed('display', true)
               .attr('transform','translate(' + margin.left + ',' + margin.top +')');
 
+  var controls = d3.select("body")
+                  .append("div")
+                  .attr("id", "controls");
+
+  var sort_btn = controls.append("button")
+                  .html("Sort data: ascending")
+                  .attr("state", 0);
 
   function plot(params){
     this.append("g")
@@ -138,6 +145,21 @@ window.onload = function(){
         .attr("transform", "translate(" + width/2 + ", 70)")
         .text("Donut type");
   }
+
+  sort_btn.on("click", function(){
+    var self = d3.select(this); //this is the sort_btn
+    var state = self.attr("state");
+    var txt = "Sort sdata: ";
+    if(state == 0){
+      state = 1;
+      txt += "descending";
+    } else if(state == 1){
+      state = 0;
+      txt += "ascending";
+    }
+    self.attr("state", state);
+    self.html(txt);
+  }); //on method allows us to create event listener
 
   plot.call(chart, {
     data: data
