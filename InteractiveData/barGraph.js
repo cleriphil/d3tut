@@ -66,6 +66,13 @@ window.onload = function(){
                   .attr("state", 0);
 
   function plot(params){
+    x.domain(data.map(function(entry){
+      return entry.key;
+    }));
+    y.domain([0,d3.max(data, function(d){
+      return d.value;
+    })]);
+
     this.append("g")
       .classed("gridline", true)
       .attr("transform", "translate(0,0)")
@@ -73,11 +80,22 @@ window.onload = function(){
         .tickSize(-width)
         .tickFormat(""));
 
+    //enter() phase: where data is bound to elements
     this.selectAll('.bar')
       .data(params.data)
       .enter()
-      .append('rect')
-      .classed("bar", true)
+        .append('rect')
+        .classed("bar", true);
+
+    this.selectAll('.bar-label')
+      .data(params.data)
+      .enter()
+        .append('text')
+        .classed('bar-label', true);
+
+
+    //update phase: where elements are updated with changing data
+    this.selectAll('.bar')
       .attr('x', function(d,i){
         return x(d.key);
       })
@@ -95,22 +113,31 @@ window.onload = function(){
       .style("fill", function(d,i){
         return ordinalColorScale(i);
       });
-      this.selectAll('.bar-label')
-        .data(params.data)
-        .enter()
-          .append('text')
-          .classed('bar-label', true)
-          .attr('x', function(d,i){
-            return x(d.key) + (x.bandwidth()/2);
-          })
-          .attr('dx', -4)
-          .attr('y', function(d,i){
-            return y(d.value);
-          })
-          .attr('dy', -6)
-          .text(function(d){
-            return d.value;
-          });
+
+    this.selectAll('.bar-label')
+      .attr('x', function(d,i){
+        return x(d.key) + (x.bandwidth()/2);
+      })
+      .attr('dx', -4)
+      .attr('y', function(d,i){
+        return y(d.value);
+      })
+      .attr('dy', -6)
+      .text(function(d){
+        return d.value;
+      });
+
+    //exit() phase: where any unbound elements are removed
+    this.selectAll('.bar')
+      .data(params.data)
+      .exit()
+      .remove();
+
+    this.selectAll('.bar-label')
+      .data(params.data)
+      .exit()
+      .remove();
+
 
       this.append("g")
         .classed('x axis', true)
@@ -148,17 +175,29 @@ window.onload = function(){
 
   sort_btn.on("click", function(){
     var self = d3.select(this); //this is the sort_btn
+    var ascending = function(a,b){
+      return a.value - b.value;
+    }
+    var descending = function(a,b){
+      return b.value - a.value;
+    }
     var state = self.attr("state");
     var txt = "Sort sdata: ";
     if(state == 0){
+      data.sort(ascending)
       state = 1;
       txt += "descending";
     } else if(state == 1){
+      data.sort(descending)
       state = 0;
       txt += "ascending";
     }
     self.attr("state", state);
     self.html(txt);
+
+    plot.call(chart, {
+      data: data
+    });
   }); //on method allows us to create event listener
 
   plot.call(chart, {
